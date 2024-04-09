@@ -10,11 +10,20 @@ QT_END_NAMESPACE
 class DlgSetChessboard : public QDialog
 {
     Q_OBJECT
-
 public:
     DlgSetChessboard(QWidget *parent = nullptr);
     ~DlgSetChessboard();
-
+private:
+    void build_ui();
+    void build_connect();
 private:
     Ui::DlgSetChessboardClass *ui;
+public:
+    qint32 getRow();
+    qint32 getColumn();
+    qint32 getX();
+    qint32 getY();
+private slots:
+    void pbtn_ok_clicked();
+    void pbtn_cancel_clicked();
 };
