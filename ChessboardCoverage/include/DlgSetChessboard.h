@@ -19,10 +19,9 @@ private:
 private:
     Ui::DlgSetChessboardClass *ui;
 public:
-    qint32 getRow();
-    qint32 getColumn();
     qint32 getX();
     qint32 getY();
+    qint32 getSize();
 private slots:
     void pbtn_ok_clicked();
     void pbtn_cancel_clicked();

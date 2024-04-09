@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>148</height>
+    <width>638</width>
+    <height>163</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,38 +21,16 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
         <item>
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="label_5">
           <property name="text">
-           <string>行：</string>
+           <string>大小因子（指数k）:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sBox_row">
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>列：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="sBox_column">
-          <property name="value">
-           <number>5</number>
-          </property>
-         </widget>
+         <widget class="QSpinBox" name="sBox_size"/>
         </item>
        </layout>
       </item>
@@ -75,7 +53,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sBox_x"/>
+         <widget class="QSpinBox" name="sBox_x">
+          <property name="value">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

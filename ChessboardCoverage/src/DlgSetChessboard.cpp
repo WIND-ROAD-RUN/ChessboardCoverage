@@ -27,15 +27,7 @@ void DlgSetChessboard::build_connect()
         this, &DlgSetChessboard::pbtn_cancel_clicked);
 }
 
-qint32 DlgSetChessboard::getRow()
-{
-    return ui->sBox_row->value();
-}
 
-qint32 DlgSetChessboard::getColumn()
-{
-    return ui->sBox_column->value();
-}
 
 qint32 DlgSetChessboard::getX()
 {
@@ -45,6 +37,11 @@ qint32 DlgSetChessboard::getX()
 qint32 DlgSetChessboard::getY()
 {
     return ui->sBox_y->value();
+}
+
+qint32 DlgSetChessboard::getSize()
+{
+    return ui->sBox_size->value();
 }
 
 void DlgSetChessboard::pbtn_ok_clicked() {
