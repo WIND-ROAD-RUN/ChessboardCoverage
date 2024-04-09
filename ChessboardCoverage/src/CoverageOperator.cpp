@@ -1,13 +1,13 @@
 #include "CoverageOperator.h"
 
-void CoverageOperator::setChessboard(Chessboard chessBoard)
+void CoverageOperator::setChessboard(const Chessboard& chessBoard)
 {
-    m_Chessboard = chessBoard;
+    m_chessboard = chessBoard;
 }
 
 Chessboard CoverageOperator::getChessboard()
 {
-    return m_Chessboard;
+    return m_chessboard;
 }
 
 bool CoverageOperator::run()
@@ -17,7 +17,7 @@ bool CoverageOperator::run()
     return true;
 }
 
-void CoverageOperator::chessBoard(int tr, int tc, int dr, int dc, int size)
+void CoverageOperator::chessBoard(const int tr, const int tc, const int dr, const int dc, const int size)
 {
     if (size == 1)
         return;
@@ -33,7 +33,7 @@ void CoverageOperator::chessBoard(int tr, int tc, int dr, int dc, int size)
     else            //此棋盘中无特殊方格
     {
         //用t号L型骨牌覆盖右下角
-        m_Chessboard[tr + s - 1][tc + s - 1] = t;
+        m_chessboard[tr + s - 1][tc + s - 1] = t;
         //覆盖其余方格
         chessBoard(tr, tc, tr + s - 1, tc + s - 1, s);
     }
@@ -47,7 +47,7 @@ void CoverageOperator::chessBoard(int tr, int tc, int dr, int dc, int size)
     else            //此棋盘中无特殊方格
     {
         //用t号L型骨牌覆盖左下角
-        m_Chessboard[tr + s - 1][tc + s] = t;
+        m_chessboard[tr + s - 1][tc + s] = t;
         //覆盖其余方格
         chessBoard(tr, tc + s, tr + s - 1, tc + s, s);
     }
@@ -61,7 +61,7 @@ void CoverageOperator::chessBoard(int tr, int tc, int dr, int dc, int size)
     else
     {
         //用t号L型骨牌覆盖右上角
-        m_Chessboard[tr + s][tc + s - 1] = t;
+        m_chessboard[tr + s][tc + s - 1] = t;
         //覆盖其余方格
         chessBoard(tr + s, tc, tr + s, tc + s - 1, s);
     }
@@ -75,7 +75,7 @@ void CoverageOperator::chessBoard(int tr, int tc, int dr, int dc, int size)
     else
     {
         //用t号L型骨牌覆盖左上角
-        m_Chessboard[tr + s][tc + s] = t;
+        m_chessboard[tr + s][tc + s] = t;
         //覆盖其余方格
         chessBoard(tr + s, tc + s, tr + s, tc + s, s);
     }

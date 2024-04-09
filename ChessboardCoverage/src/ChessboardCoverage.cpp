@@ -20,7 +20,7 @@ void ChessboardCoverage::build_ui()
 {
     m_coverageOperator = new CoverageOperator;
 
-    this->setWindowTitle("棋盘覆盖演示");
+    this->setWindowTitle(QString("棋盘覆盖演示"));
     ui->tableWidget->horizontalHeader()->hide();
     ui->tableWidget->verticalHeader()->hide();
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(50);
@@ -38,15 +38,15 @@ void ChessboardCoverage::build_connect()
         this, &ChessboardCoverage::pbtn_CoverageOperate_clicked);
 }
 
-QColor ChessboardCoverage::getColor(int value)
+QColor ChessboardCoverage::getColor(const int value) const
 {
     if (value == 0) {
-        return QColor(Qt::black);
+        return QColor{Qt::black};
     }
     return m_color.at(value % m_color.size());
 }
 
-void ChessboardCoverage::drawChessboard(qint32 row, qint32 column)
+void ChessboardCoverage::drawChessboard(const qint32 row, const qint32 column) const
 {
     ui->tableWidget->clear();
     ui->tableWidget->setRowCount(row);
@@ -58,12 +58,12 @@ void ChessboardCoverage::drawChessboard(qint32 row, qint32 column)
     }
 }
 
-void ChessboardCoverage::paintChessboardItem(qint32 row, qint32 column, QBrush color)
+void ChessboardCoverage::paintChessboardItem(const qint32 row, const qint32 column, const QBrush& color) const
 {
     ui->tableWidget->item(row, column)->setBackground(color);
 }
 
-void ChessboardCoverage::paintChessboard(const Chessboard& chessboard)
+void ChessboardCoverage::paintChessboard(const Chessboard& chessboard) const
 {
     for (int i = 0; i < chessboard.size(); i++) {
         for (int j = 0; j < chessboard[i].size(); j++) {
@@ -78,39 +78,40 @@ void ChessboardCoverage::pbtn_CoverageOperate_clicked()
 {
     m_coverageOperator->setNum(0);
     m_coverageOperator->run();
-    auto result = m_coverageOperator->getChessboard();
+    const auto result = m_coverageOperator->getChessboard();
 
     paintChessboard(result);
 }
 
 void ChessboardCoverage::pbtn_resetChessboard_clicked() {
-    auto dlg = new DlgSetChessboard();
-    auto result = dlg->exec();
+    const auto dlg = new DlgSetChessboard();
 
-    if (result == QDialog::Accepted) {
-        auto size = dlg->getSize();
+    if (const auto result = dlg->exec();
+        result == QDialog::Accepted) {
+        const auto size = dlg->getSize();
 
-        auto row = pow(2, size);
+        const auto row = pow(2, size);
 
         drawChessboard(row, row);
-        m_specialBlock_X = dlg->getX();
-        m_specialBlock_Y = dlg->getY();
-        paintChessboardItem(m_specialBlock_X, m_specialBlock_Y, Qt::black);
+        m_specialBlock_x = dlg->getX();
+        m_specialBlock_y = dlg->getY();
+        paintChessboardItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
         Chessboard chessboard;
         for (int i = 0; i < row; i++) {
             std::vector<int> line;
+            line.reserve(static_cast<std::vector<int>::size_type>(row));
             for (int j = 0; j < row; j++) {
                 line.push_back(0);
             }
             chessboard.push_back(line);
         }
 
-        chessboard[m_specialBlock_X][m_specialBlock_Y] = 0;
+        chessboard[m_specialBlock_x][m_specialBlock_y] = 0;
 
         m_coverageOperator->setChessboard(chessboard);
-        m_coverageOperator->setX(m_specialBlock_X);
-        m_coverageOperator->setY(m_specialBlock_Y);
+        m_coverageOperator->setX(m_specialBlock_x);
+        m_coverageOperator->setY(m_specialBlock_y);
         m_coverageOperator->setSize(row);
     }
 

@@ -29,17 +29,17 @@ void DlgSetChessboard::build_connect()
 
 
 
-qint32 DlgSetChessboard::getX()
+qint32 DlgSetChessboard::getX() const
 {
     return ui->sBox_x->value();
 }
 
-qint32 DlgSetChessboard::getY()
+qint32 DlgSetChessboard::getY() const
 {
     return ui->sBox_y->value();
 }
 
-qint32 DlgSetChessboard::getSize()
+qint32 DlgSetChessboard::getSize() const
 {
     return ui->sBox_size->value();
 }
