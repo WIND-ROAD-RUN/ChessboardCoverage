@@ -30,7 +30,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sBox_row"/>
+         <widget class="QSpinBox" name="sBox_row">
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -44,7 +48,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="sBox_column"/>
+         <widget class="QSpinBox" name="sBox_column">
+          <property name="value">
+           <number>5</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
