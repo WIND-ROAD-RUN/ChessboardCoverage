@@ -55,7 +55,9 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
     auto result=dlg->exec();
     if (result==QDialog::Accepted) {
         drawChessboard(dlg->getRow(),dlg->getColumn());
-        paintChessboardItem(dlg->getX(), dlg->getY(),Qt::black);
+        m_specialBlock_X = dlg->getX();
+        m_specialBlock_Y = dlg->getY();
+        paintChessboardItem(m_specialBlock_X, m_specialBlock_Y,Qt::black);
     }
 
     delete dlg;

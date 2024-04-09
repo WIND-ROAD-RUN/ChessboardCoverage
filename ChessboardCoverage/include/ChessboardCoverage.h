@@ -10,7 +10,9 @@ QT_END_NAMESPACE
 class ChessboardCoverage : public QMainWindow
 {
     Q_OBJECT
-
+private:
+    qint32 m_specialBlock_X{0};
+    qint32 m_specialBlock_Y{ 0 };
 public:
     ChessboardCoverage(QWidget *parent = nullptr);
     ~ChessboardCoverage();
