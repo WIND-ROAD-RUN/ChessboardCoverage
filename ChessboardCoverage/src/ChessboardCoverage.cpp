@@ -107,6 +107,11 @@ void ChessboardCoverage::check_index() const
         ui->pbtn_nextStep->setEnabled(false);
         ui->pbtn_lastStep->setEnabled(true);
     }
+    else
+    {
+        ui->pbtn_nextStep->setEnabled(true);
+        ui->pbtn_lastStep->setEnabled(true);
+    }
 }
 
 void ChessboardCoverage::pbtn_CoverageOperate_clicked()
