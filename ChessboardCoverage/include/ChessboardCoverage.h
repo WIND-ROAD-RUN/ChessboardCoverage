@@ -31,6 +31,7 @@ private:
     qint32 m_specialBlock_y{ 0 };
 private:
     CoverageOperator* m_coverageOperator{nullptr};
+
 private:
     QVector<QColor> m_color
 

@@ -9,12 +9,13 @@ class CoverageOperator {
 private:
     Chessboard m_chessboard;
 
-    int m_num{0};
+    int m_num{ 0 };
 
     int m_locateX{ 0 };
-    int m_locateY{ 0 };
-    int m_size{0};
 
+    int m_locateY{ 0 };
+
+    int m_size{ 0 };
 
 public:
     CoverageOperator() = default;
@@ -37,7 +38,9 @@ public:
     void setNum(const int num) { m_num = num; }
 
     void setX(const int x) { m_locateX = x; }
+
     void setY(const int y) { m_locateY = y; }
+
     void setSize(const int size) { m_size = size; }
 
     bool run();
