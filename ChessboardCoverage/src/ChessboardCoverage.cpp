@@ -24,8 +24,10 @@ void ChessboardCoverage::build_ui()
     this->setWindowTitle(QString("棋盘覆盖演示"));
     ui->tableWidget->horizontalHeader()->hide();
     ui->tableWidget->verticalHeader()->hide();
-    ui->tableWidget->verticalHeader()->setDefaultSectionSize(50);
-    ui->tableWidget->horizontalHeader()->setDefaultSectionSize(50);
+
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     pbtn_resetChessboard_clicked();
