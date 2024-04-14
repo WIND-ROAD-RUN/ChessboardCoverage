@@ -106,10 +106,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="ui\ChessboardCoverage.qrc" />
+    <QtUic Include="ui\DlgSetChessboard.ui" />
     <QtUic Include="ui\ChessboardCoverage.ui" />
     <QtMoc Include="include\ChessboardCoverage.h" />
+    <ClCompile Include="src\CoverageOperator.cpp" />
+    <ClCompile Include="src\DlgSetChessboard.cpp" />
     <ClCompile Include="src\ChessboardCoverage.cpp" />
     <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="include\DlgSetChessboard.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CoverageOperator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
