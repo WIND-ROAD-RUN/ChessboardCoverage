@@ -29,6 +29,11 @@ private:
     qint32 m_specialBlock_x{0};
 
     qint32 m_specialBlock_y{ 0 };
+
+    CoverageOperator::ChessboardHistoryTableIndex m_index{ 0 };
+
+    CoverageOperator::ChessboardHistoryTableIndex m_indexMaxsize{ 0 };
+
 private:
     CoverageOperator* m_coverageOperator{nullptr};
 
@@ -54,10 +59,22 @@ private:
 private:
     Ui::ChessboardCoverageClass *ui;
 
+private:
+    void check_index() const;
+
 private slots:
     void pbtn_resetChessboard_clicked();
 
     void pbtn_CoverageOperate_clicked();
+
+    void pbtn_skipToInitial_clicked();
+
+    void pbtn_skipToFinal_clicked();
+
+    void pbtn_lastStep_clicked();
+
+    void pbtn_nextStep_clicked();
+
 
 };
 

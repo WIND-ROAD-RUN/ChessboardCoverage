@@ -25,7 +25,9 @@ public:
 
 private:
     void build_ui();
+
     void build_connect();
+
 private:
     Ui::DlgSetChessboardClass *ui;
 public:

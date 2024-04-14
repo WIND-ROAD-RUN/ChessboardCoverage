@@ -1,5 +1,6 @@
 ﻿#include "ChessboardCoverage.h"
 #include"DlgSetChessboard.h"
+#include<QMessageBox>
 
 ChessboardCoverage::ChessboardCoverage(QWidget* parent)
     : QMainWindow(parent)
@@ -36,12 +37,26 @@ void ChessboardCoverage::build_connect()
         this, &ChessboardCoverage::pbtn_resetChessboard_clicked);
     QObject::connect(ui->pbtn_CoverageOperate, &QPushButton::clicked,
         this, &ChessboardCoverage::pbtn_CoverageOperate_clicked);
+
+    QObject::connect(ui->pbtn_lastStep, &QPushButton::clicked,
+        this, &ChessboardCoverage::pbtn_lastStep_clicked);
+    QObject::connect(ui->pbtn_nextStep, &QPushButton::clicked,
+        this, &ChessboardCoverage::pbtn_nextStep_clicked);
+
+    QObject::connect(ui->pbtn_skipToFinal, &QPushButton::clicked,
+        this, &ChessboardCoverage::pbtn_skipToFinal_clicked);
+    QObject::connect(ui->pbtn_skipToInitial, &QPushButton::clicked,
+        this, &ChessboardCoverage::pbtn_skipToInitial_clicked);
 }
 
 QColor ChessboardCoverage::getColor(const int value) const
 {
     if (value == 0) {
         return QColor{Qt::black};
+    }
+    if(value==-1)
+    {
+        return QColor{ Qt::white };
     }
     return m_color.at(value % m_color.size());
 }
@@ -74,13 +89,82 @@ void ChessboardCoverage::paintChessboard(const Chessboard& chessboard) const
 
 }
 
+void ChessboardCoverage::check_index() const
+{
+    if(m_index==0)
+    {
+        ui->pbtn_nextStep->setEnabled(true);
+        ui->pbtn_lastStep->setEnabled(false);
+    }
+    else if(m_index==m_indexMaxsize)
+    {
+        ui->pbtn_nextStep->setEnabled(false);
+        ui->pbtn_lastStep->setEnabled(true);
+    }
+}
+
 void ChessboardCoverage::pbtn_CoverageOperate_clicked()
 {
     m_coverageOperator->setNum(0);
     m_coverageOperator->run();
-    const auto result = m_coverageOperator->getChessboard();
 
-    paintChessboard(result);
+    QMessageBox::information(this,QString("加载"), QString("加载成功"));
+
+    ui->pbtn_skipToInitial->setEnabled(true);
+    ui->pbtn_skipToFinal->setEnabled(true);
+
+    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+
+    m_indexMaxsize = table.size() - 1;
+
+    check_index();
+    
+}
+
+void ChessboardCoverage::pbtn_skipToInitial_clicked()
+{
+    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+
+    m_index = 0;
+
+    paintChessboard(table.at(m_index));
+
+    check_index();
+}
+
+void ChessboardCoverage::pbtn_skipToFinal_clicked()
+{
+    const auto & table= m_coverageOperator->getChessboardHistoryTable();
+
+    m_index = table.size()-1;
+
+
+    paintChessboard(table.at(m_index));
+
+    check_index();
+
+}
+
+void ChessboardCoverage::pbtn_lastStep_clicked()
+{
+    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+
+    --m_index ;
+
+    paintChessboard(table.at(m_index));
+
+    check_index();
+}
+
+void ChessboardCoverage::pbtn_nextStep_clicked()
+{
+    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+
+    ++m_index;
+
+    paintChessboard(table.at(m_index));
+
+    check_index();
 }
 
 void ChessboardCoverage::pbtn_resetChessboard_clicked() {
@@ -102,7 +186,7 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
             std::vector<int> line;
             line.reserve(static_cast<std::vector<int>::size_type>(row));
             for (int j = 0; j < row; j++) {
-                line.push_back(0);
+                line.push_back(-1);
             }
             chessboard.push_back(line);
         }
@@ -116,4 +200,11 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
     }
 
     delete dlg;
+
+    ui->pbtn_nextStep->setEnabled(false);
+    ui->pbtn_lastStep->setEnabled(false);
+    ui->pbtn_skipToInitial->setEnabled(false);
+    ui->pbtn_skipToFinal->setEnabled(false);
+
+    m_index = 0;
 }

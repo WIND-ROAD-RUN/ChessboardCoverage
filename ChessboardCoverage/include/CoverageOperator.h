@@ -6,6 +6,8 @@
 using Chessboard = std::vector<std::vector<int>>;
 
 class CoverageOperator {
+public:
+    using ChessboardHistoryTableIndex = std::vector<Chessboard>::size_type;
 private:
     Chessboard m_chessboard;
 
@@ -16,6 +18,8 @@ private:
     int m_locateY{ 0 };
 
     int m_size{ 0 };
+
+    std::vector<Chessboard> m_chessboardHistoryTable{};
 
 public:
     CoverageOperator() = default;
@@ -46,6 +50,8 @@ public:
     bool run();
 
     void chessBoard(int tr, int tc, int dr, int dc, int size);
+
+    const std::vector<Chessboard> & getChessboardHistoryTable()const;
 };
 
 
