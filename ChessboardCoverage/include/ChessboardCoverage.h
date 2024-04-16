@@ -62,6 +62,8 @@ private:
 private:
     void check_index() const;
 
+    void ini_chessboard();
+
 private slots:
     void pbtn_resetChessboard_clicked();
 
