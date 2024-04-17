@@ -31,6 +31,10 @@ void ChessboardCoverage::build_ui()
 
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
+    auto palette=ui->label_loadInfo->palette();
+    palette.setColor(QPalette::WindowText, Qt::red);
+    ui->label_loadInfo->setPalette(palette);
+
     ini_chessboard();
 }
 
@@ -155,6 +159,18 @@ void ChessboardCoverage::ini_chessboard()
 
         m_index = 0;
     }
+    else
+    {
+        ui->pbtn_nextStep->setEnabled(false);
+        ui->pbtn_lastStep->setEnabled(false);
+        ui->pbtn_skipToInitial->setEnabled(false);
+        ui->pbtn_skipToFinal->setEnabled(false);
+        ui->pbtn_autoDisplay->setEnabled(false);
+        ui->pbtn_CoverageOperate->setEnabled(false);
+
+    }
+
+    
 
     delete dlg;
 }
@@ -163,8 +179,6 @@ void ChessboardCoverage::pbtn_CoverageOperate_clicked()
 {
     m_coverageOperator->setNum(0);
     m_coverageOperator->run();
-
-    QMessageBox::information(this, QString("加载"), QString("加载成功"));
 
     ui->pbtn_skipToInitial->setEnabled(true);
     ui->pbtn_skipToFinal->setEnabled(true);
@@ -177,6 +191,8 @@ void ChessboardCoverage::pbtn_CoverageOperate_clicked()
     check_index();
 
     ui->pbtn_CoverageOperate->setEnabled(false);
+
+    ui->label_loadInfo->setVisible(false);
 
 }
 
@@ -275,9 +291,21 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
 
     const auto row = pow(2, size);
 
+    const auto locateX= ui->sBox_x->value();
+    const auto locateY= ui->sBox_y->value();
+
+    if(locateX>=row||locateY>=row)
+    {
+        QMessageBox::warning(this, "错误", "特殊块位置不在棋盘中");
+
+        return;
+    }
+
+    m_specialBlock_x = locateX;
+    m_specialBlock_y = locateY;
+
+
     drawChessboard(row, row);
-    m_specialBlock_x = ui->sBox_x->value();
-    m_specialBlock_y = ui->sBox_y->value();
     paintChessboardItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
     Chessboard chessboard;
@@ -306,6 +334,6 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
 
     m_index = 0;
 
-
+    ui->label_loadInfo->setVisible(true);
 
 }
