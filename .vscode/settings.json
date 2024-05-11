@@ -1,4 +1,6 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/ChessboardCoverage",
+    "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.buildDirectory": "${workspaceFolder}/build",
+    "ctest.sourceDirectory": "${workspaceFolder}",
+    "ctest.buildDirectory": "${workspaceFolder}/build"
 }
