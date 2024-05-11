@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "E:/WorkPlace/vscode/rep1/1/ChessboardCoverage"
+    "cmake.sourceDirectory": "${workspaceFolder}/ChessboardCoverage",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
 }
