@@ -1,6 +1,11 @@
 set(WORKPLACE_DIR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
 set(source_files_path ${CMAKE_CURRENT_SOURCE_DIR}/source)
 
+source_group("src" FILES ${source_files_path}/src/*.cpp)
+source_group("include" FILES ${source_files_path}/include/*.h)
+source_group("ui" FILES ${source_files_path}/ui/*.ui)
+source_group("qrc" FILES ${source_files_path}/ui/*.qrc)
+
 find_package(Qt6 COMPONENTS Widgets REQUIRED) # Qt COMPONENTS
 
 list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS ${source_files_path}/ui)
