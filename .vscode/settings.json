@@ -2,5 +2,6 @@
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.buildDirectory": "${workspaceFolder}/build",
     "ctest.sourceDirectory": "${workspaceFolder}",
-    "ctest.buildDirectory": "${workspaceFolder}/build"
+    "ctest.buildDirectory": "${workspaceFolder}/build",
+    "C_Cpp.errorSquiggles": "disabled"
 }
