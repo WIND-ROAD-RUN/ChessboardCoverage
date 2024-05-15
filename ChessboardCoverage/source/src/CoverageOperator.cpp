@@ -5,8 +5,15 @@ void CoverageOperator::setChessboard(const Chessboard& chessBoard)
     m_chessboard = chessBoard;
 
     m_chessboardHistoryTable.clear();
+    
+    iniCom();
 
     m_chessboardHistoryTable.push_back(m_chessboard);
+}
+
+void CoverageOperator::iniCom()
+{
+    m_chessboardHistoryList.clear();
 }
 
 Chessboard CoverageOperator::getChessboard()
@@ -100,4 +107,9 @@ void CoverageOperator::chessBoard(const int tr, const int tc, const int dr, cons
 const std::vector<Chessboard>& CoverageOperator::getChessboardHistoryTable() const
 {
     return m_chessboardHistoryTable;
+}
+
+const ChessboardHistoryList& CoverageOperator::getChessboardHistoryList() const
+{
+    return m_chessboardHistoryList;
 }

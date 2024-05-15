@@ -4,10 +4,14 @@
 #include<vector>
 
 using Chessboard = std::vector<std::vector<int>>;
+using ChessboardLocate = std::pair<int, int>;
+using ChessboardItem = std::pair<ChessboardLocate,int>;
+using ChessboardHistoryList = std::vector<ChessboardItem>;
 
 class CoverageOperator {
 public:
     using ChessboardHistoryTableIndex = std::vector<Chessboard>::size_type;
+    using ChessboardHistorayListIndex = ChessboardHistoryList::size_type;
 private:
     Chessboard m_chessboard;
 
@@ -20,6 +24,8 @@ private:
     int m_size{ 0 };
 
     std::vector<Chessboard> m_chessboardHistoryTable{};
+
+    ChessboardHistoryList m_chessboardHistoryList{};
 
 public:
     CoverageOperator() = default;
@@ -37,6 +43,8 @@ public:
 public:
     void setChessboard(const Chessboard& chessBoard);
 
+    void iniCom();
+
     Chessboard  getChessboard();
 
     void setNum(const int num) { m_num = num; }
@@ -52,6 +60,8 @@ public:
     void chessBoard(int tr, int tc, int dr, int dc, int size);
 
     const std::vector<Chessboard> & getChessboardHistoryTable()const;
+
+    const ChessboardHistoryList& getChessboardHistoryList()const;
 };
 
 
