@@ -120,17 +120,13 @@ void ChessboardCoverage::check_index() const
 
 void ChessboardCoverage::ini_chessboard()
 {
-    const auto dlg = new DlgSetChessboard();
-
-    if (const auto result = dlg->exec();
-        result == QDialog::Accepted) {
-        const auto size = dlg->getSize();
+        const auto size = 2;
 
         const auto row = pow(2, size);
 
         drawChessboard(row, row);
-        m_specialBlock_x = dlg->getX();
-        m_specialBlock_y = dlg->getY();
+        m_specialBlock_x = 0;
+        m_specialBlock_y = 0;
         paintChessboardItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
         Chessboard chessboard;
@@ -158,21 +154,6 @@ void ChessboardCoverage::ini_chessboard()
         ui->pbtn_CoverageOperate->setEnabled(true);
 
         m_index = 0;
-    }
-    else
-    {
-        ui->pbtn_nextStep->setEnabled(false);
-        ui->pbtn_lastStep->setEnabled(false);
-        ui->pbtn_skipToInitial->setEnabled(false);
-        ui->pbtn_skipToFinal->setEnabled(false);
-        ui->pbtn_autoDisplay->setEnabled(false);
-        ui->pbtn_CoverageOperate->setEnabled(false);
-
-    }
-
-    
-
-    delete dlg;
 }
 
 void ChessboardCoverage::pbtn_CoverageOperate_clicked()
