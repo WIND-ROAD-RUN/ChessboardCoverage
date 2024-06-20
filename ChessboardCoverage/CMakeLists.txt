@@ -13,7 +13,6 @@ file(GLOB include_files ${source_files_path}/include/*.h)
 set(EXECUTABLE_OUTPUT_PATH ${WORKPLACE_DIR_PATH}/bin)
 add_executable(ChessboardCoverage
     WIN32 # If you need a terminal for debug, please comment this statement 
-    ${srcs} ${include_files}
-) 
+    ${srcs} ${include_files}) 
 target_include_directories(ChessboardCoverage PRIVATE ${source_files_path}/include)
 target_link_libraries(ChessboardCoverage PRIVATE Qt6::Widgets) # Qt6 Shared Library
