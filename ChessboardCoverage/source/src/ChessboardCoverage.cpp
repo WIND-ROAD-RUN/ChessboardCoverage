@@ -1,5 +1,4 @@
 #include "ChessboardCoverage.h"
-#include"DlgSetChessboard.h"
 #include<QMessageBox>
 #include<QThread>
 
@@ -31,9 +30,7 @@ void ChessboardCoverage::build_ui()
 
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    auto palette=ui->label_loadInfo->palette();
-    palette.setColor(QPalette::WindowText, Qt::red);
-    ui->label_loadInfo->setPalette(palette);
+    ui->label_operateState->setVisible(false);
 
     ini_chessboard();
 }
@@ -42,8 +39,6 @@ void ChessboardCoverage::build_connect()
 {
     QObject::connect(ui->pbtn_resetChessboard, &QPushButton::clicked,
         this, &ChessboardCoverage::pbtn_resetChessboard_clicked);
-    QObject::connect(ui->pbtn_CoverageOperate, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_CoverageOperate_clicked);
 
     QObject::connect(ui->pbtn_lastStep, &QPushButton::clicked,
         this, &ChessboardCoverage::pbtn_lastStep_clicked);
@@ -120,17 +115,13 @@ void ChessboardCoverage::check_index() const
 
 void ChessboardCoverage::ini_chessboard()
 {
-    const auto dlg = new DlgSetChessboard();
-
-    if (const auto result = dlg->exec();
-        result == QDialog::Accepted) {
-        const auto size = dlg->getSize();
+        const auto size = 2;
 
         const auto row = pow(2, size);
 
         drawChessboard(row, row);
-        m_specialBlock_x = dlg->getX();
-        m_specialBlock_y = dlg->getY();
+        m_specialBlock_x = 0;
+        m_specialBlock_y = 0;
         paintChessboardItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
         Chessboard chessboard;
@@ -150,49 +141,21 @@ void ChessboardCoverage::ini_chessboard()
         m_coverageOperator->setY(m_specialBlock_y);
         m_coverageOperator->setSize(row);
 
-        ui->pbtn_nextStep->setEnabled(false);
-        ui->pbtn_lastStep->setEnabled(false);
-        ui->pbtn_skipToInitial->setEnabled(false);
-        ui->pbtn_skipToFinal->setEnabled(false);
-        ui->pbtn_autoDisplay->setEnabled(false);
-        ui->pbtn_CoverageOperate->setEnabled(true);
-
         m_index = 0;
-    }
-    else
-    {
-        ui->pbtn_nextStep->setEnabled(false);
-        ui->pbtn_lastStep->setEnabled(false);
-        ui->pbtn_skipToInitial->setEnabled(false);
-        ui->pbtn_skipToFinal->setEnabled(false);
-        ui->pbtn_autoDisplay->setEnabled(false);
-        ui->pbtn_CoverageOperate->setEnabled(false);
 
-    }
-
-    
-
-    delete dlg;
+        CoverageOperateLoad();
 }
 
-void ChessboardCoverage::pbtn_CoverageOperate_clicked()
+void ChessboardCoverage::CoverageOperateLoad()
 {
     m_coverageOperator->setNum(0);
     m_coverageOperator->run();
-
-    ui->pbtn_skipToInitial->setEnabled(true);
-    ui->pbtn_skipToFinal->setEnabled(true);
-    ui->pbtn_autoDisplay->setEnabled(true);
 
     const auto& table = m_coverageOperator->getChessboardHistoryTable();
 
     m_indexMaxsize = table.size() - 1;
 
     check_index();
-
-    ui->pbtn_CoverageOperate->setEnabled(false);
-
-    ui->label_loadInfo->setVisible(false);
 
 }
 
@@ -244,11 +207,7 @@ void ChessboardCoverage::pbtn_nextStep_clicked()
 
 void ChessboardCoverage::pbtn_autoDisplay_clicked()
 {
-    const auto result = QMessageBox::question(this, QString("自动化展示"), QString("是否自动化展示"));
-    if (result != QMessageBox::StandardButton::Yes)
-    {
-        return;
-    }
+    ui->label_operateState->setVisible(true);
 
     ui->pbtn_skipToInitial->setEnabled(false);
     ui->pbtn_skipToFinal->setEnabled(false);
@@ -281,6 +240,8 @@ void ChessboardCoverage::pbtn_autoDisplay_clicked()
     ui->pbtn_autoDisplay->setEnabled(true);
 
     check_index();
+
+    ui->label_operateState->setVisible(false);
 
 }
 
@@ -325,15 +286,8 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
     m_coverageOperator->setY(m_specialBlock_y);
     m_coverageOperator->setSize(row);
 
-    ui->pbtn_nextStep->setEnabled(false);
-    ui->pbtn_lastStep->setEnabled(false);
-    ui->pbtn_skipToInitial->setEnabled(false);
-    ui->pbtn_skipToFinal->setEnabled(false);
-    ui->pbtn_autoDisplay->setEnabled(false);
-    ui->pbtn_CoverageOperate->setEnabled(true);
-
     m_index = 0;
 
-    ui->label_loadInfo->setVisible(true);
+    CoverageOperateLoad();
 
 }

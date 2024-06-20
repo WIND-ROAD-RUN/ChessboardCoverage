@@ -40,7 +40,11 @@ private:
 private:
     QVector<QColor> m_color
 
-    {QColor(Qt::red),QColor(Qt::blue), QColor(Qt::yellow), QColor(Qt::green), QColor(Qt::cyan), QColor(Qt::magenta), QColor(Qt::gray), QColor(Qt::darkGray) , QColor(Qt::lightGray),QColor(Qt::transparent) };
+    { QColor(Qt::red),QColor(Qt::blue),
+        QColor(Qt::yellow), QColor(Qt::green),
+        QColor(Qt::cyan), QColor(Qt::magenta),
+        QColor(Qt::gray), QColor(Qt::darkGray) ,
+        QColor(Qt::lightGray),QColor(Qt::transparent)};
 
 private:
     void build_ui();
@@ -64,10 +68,10 @@ private:
 
     void ini_chessboard();
 
+    void CoverageOperateLoad();
+
 private slots:
     void pbtn_resetChessboard_clicked();
-
-    void pbtn_CoverageOperate_clicked();
 
     void pbtn_skipToInitial_clicked();
 

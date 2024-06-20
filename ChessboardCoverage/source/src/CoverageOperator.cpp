@@ -95,6 +95,8 @@ void CoverageOperator::chessBoard(const int tr, const int tc, const int dr, cons
         chessBoard(tr + s, tc + s, tr + s, tc + s, s);
     }
 
+
+
 }
 
 const std::vector<Chessboard>& CoverageOperator::getChessboardHistoryTable() const
