@@ -1,5 +1,4 @@
 #include "ChessboardCoverage.h"
-#include"DlgSetChessboard.h"
 #include<QMessageBox>
 #include<QThread>
 
