@@ -3,6 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_ChessboardCoverage.h"
 #include "CoverageOperator.h"
+#include"PaintOperator.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ChessboardCoverageClass; };
@@ -36,7 +37,7 @@ private:
 
 private:
     CoverageOperator* m_coverageOperator{nullptr};
-
+    PaintHistoryList m_paintHistoryList{};
 private:
     QVector<QColor> m_color
 
@@ -59,6 +60,8 @@ private:
     void paintChessboardItem(qint32 row, qint32 column, const QBrush& color) const;
 
     void writeChessboardNumber(const Chessboard &  chessboard) const;
+
+    void paintChessboardItem(const PaintHistoryList  & paintHistoryList);
 
 private:
     Ui::ChessboardCoverageClass *ui;

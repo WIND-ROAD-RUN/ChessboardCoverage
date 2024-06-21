@@ -96,6 +96,40 @@ void ChessboardCoverage::writeChessboardNumber(const Chessboard& chessboard) con
 
 }
 
+void ChessboardCoverage::paintChessboardItem(const PaintHistoryList& paintHistoryList)
+{
+    int size = ui->sBox_sizeK->value();
+    
+    size = std::pow(2, size);
+    size = size / 2;
+
+    for (int i = 0;i<paintHistoryList.size();++i) {
+        for (int j = 0;j< paintHistoryList[i].first.size();++j) {
+            const auto & item = paintHistoryList[i].first[j];
+            if ((i/size)%2) {
+                if (i%2) {
+                    paintChessboardItem(item.first, item.second, getColor(2));
+                }
+                else {
+                    paintChessboardItem(item.first, item.second, getColor(3));
+                }
+                
+            }
+            else {
+                if (i % 2) {
+                    paintChessboardItem(item.first, item.second, getColor(3));
+                }
+                else {
+                    paintChessboardItem(item.first, item.second, getColor(2));
+                }
+            }
+
+            
+        }
+    }
+
+}
+
 void ChessboardCoverage::check_index() const
 {
     if (m_index == 0)
@@ -159,9 +193,8 @@ void ChessboardCoverage::CoverageOperateLoad()
 
     check_index();
 
-    PaintOperator PO;
-    PO.colorPaint(m_coverageOperator->getChessboard());
-
+    m_paintHistoryList= PaintOperator::colorPaint(m_coverageOperator->getChessboard());
+    paintChessboardItem(m_paintHistoryList);//////////////////////////////
 }
 
 void ChessboardCoverage::pbtn_skipToInitial_clicked()
