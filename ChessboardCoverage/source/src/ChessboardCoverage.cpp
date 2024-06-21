@@ -68,6 +68,27 @@ QColor ChessboardCoverage::getColor(const int value) const
     return m_color.at(value % m_color.size());
 }
 
+QColor ChessboardCoverage::getColor(ChessboardColor color) const
+{
+    switch (color) {
+        case ChessboardColor::WHITE:{
+            return QColor{ Qt::white };
+        }
+        case ChessboardColor::BLACK: {
+            return QColor{ Qt::black };
+        }
+        case ChessboardColor::GREEN:{
+            return QColor{ Qt::green };
+        }
+        case ChessboardColor::RED: {
+            return QColor{ Qt::red };
+        }
+        case ChessboardColor::YELLOW: {
+            return QColor{ Qt::yellow };
+        }
+    }
+}
+
 void ChessboardCoverage::drawChessboard(const qint32 row, const qint32 column) const
 {
     ui->tableWidget->clear();
@@ -80,59 +101,37 @@ void ChessboardCoverage::drawChessboard(const qint32 row, const qint32 column) c
     }
 }
 
-void ChessboardCoverage::paintChessboardItem(const qint32 row, const qint32 column, const QBrush& color) const
+void ChessboardCoverage::paintFromItem(const qint32 row, const qint32 column, const QBrush& color) const
 {
     ui->tableWidget->item(row, column)->setBackground(color);
 }
 
-void ChessboardCoverage::writeChessboardNumber(const Chessboard& chessboard) const
+void ChessboardCoverage::paintChessboardItem(const PaintItem& paintItem)
 {
-    for (int i = 0; i < chessboard.size(); i++) {
-        for (int j = 0; j < chessboard[i].size(); j++) {
-            /*paintChessboardItem(i, j, getColor(chessboard[i][j]));*/
-            ui->tableWidget->item(i, j)->setText(QString::number(chessboard[i][j]));
+    auto color = paintItem.color;
+    for (const auto &item: paintItem.paintLocate) {
+        if (color==1) {
+            paintFromItem(item.first, item.second, getColor(ChessboardColor::RED));
+        }
+        else if(color == 2){
+            paintFromItem(item.first, item.second, getColor(ChessboardColor::GREEN));
+        }
+        else {
+            paintFromItem(item.first, item.second, getColor(ChessboardColor::YELLOW));
         }
     }
-
 }
 
-void ChessboardCoverage::paintChessboardItem(const PaintHistoryList& paintHistoryList)
+void ChessboardCoverage::paintChessboardItem(const PaintItem& paintItem, ChessboardColor color)
 {
-    int size = ui->sBox_sizeK->value();
-    
-    size = std::pow(2, size);
-    size = size / 2;
-
-    for (int i = 0;i<paintHistoryList.size();++i) {
-        for (int j = 0;j< paintHistoryList[i].first.size();++j) {
-            const auto & item = paintHistoryList[i].first[j];
-            if ((i/size)%2) {
-                if (i%2) {
-                    paintChessboardItem(item.first, item.second, getColor(2));
-                }
-                else {
-                    paintChessboardItem(item.first, item.second, getColor(3));
-                }
-                
-            }
-            else {
-                if (i % 2) {
-                    paintChessboardItem(item.first, item.second, getColor(3));
-                }
-                else {
-                    paintChessboardItem(item.first, item.second, getColor(2));
-                }
-            }
-
-            
-        }
+    for (const auto& item : paintItem.paintLocate) {
+        paintFromItem(item.first, item.second, getColor(color));
     }
-
 }
 
 void ChessboardCoverage::check_index() const
 {
-    if (m_index == 0)
+    if (m_index == -1)
     {
         ui->pbtn_nextStep->setEnabled(true);
         ui->pbtn_lastStep->setEnabled(false);
@@ -158,7 +157,7 @@ void ChessboardCoverage::ini_chessboard()
         drawChessboard(row, row);
         m_specialBlock_x = 0;
         m_specialBlock_y = 0;
-        paintChessboardItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
+        paintFromItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
         Chessboard chessboard;
         for (int i = 0; i < row; i++) {
@@ -177,7 +176,7 @@ void ChessboardCoverage::ini_chessboard()
         m_coverageOperator->setY(m_specialBlock_y);
         m_coverageOperator->setSize(row);
 
-        m_index = 0;
+        m_index = -1;
 
         CoverageOperateLoad();
 }
@@ -187,35 +186,29 @@ void ChessboardCoverage::CoverageOperateLoad()
     m_coverageOperator->setNum(0);
     m_coverageOperator->run();
 
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
-
-    m_indexMaxsize = table.size() - 1;
-
     check_index();
-
-    m_paintHistoryList= PaintOperator::colorPaint(m_coverageOperator->getChessboard());
-    paintChessboardItem(m_paintHistoryList);//////////////////////////////
+    m_paintItemList= PaintOperator::colorPaint(m_coverageOperator->getChessboard(),ui->sBox_sizeK->value());
+    m_indexMaxsize = m_paintItemList.size() - 1;
 }
 
 void ChessboardCoverage::pbtn_skipToInitial_clicked()
 {
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
-
     m_index = 0;
 
-    writeChessboardNumber(table.at(m_index));
+    for (const auto& item : m_paintItemList) {
+        paintChessboardItem(item,ChessboardColor::WHITE);
+    }
 
     check_index();
 }
 
 void ChessboardCoverage::pbtn_skipToFinal_clicked()
 {
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+    m_index = m_paintItemList.size() - 1;
 
-    m_index = table.size() - 1;
-
-
-    writeChessboardNumber(table.at(m_index));
+    for (const auto & item: m_paintItemList) {
+        paintChessboardItem(item);
+    }
 
     check_index();
 
@@ -223,28 +216,23 @@ void ChessboardCoverage::pbtn_skipToFinal_clicked()
 
 void ChessboardCoverage::pbtn_lastStep_clicked()
 {
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
-
+    const auto& table = m_paintItemList;
+    paintChessboardItem(m_paintItemList.at(m_index), ChessboardColor::WHITE);
     --m_index;
-
-    writeChessboardNumber(table.at(m_index));
-
     check_index();
 }
 
 void ChessboardCoverage::pbtn_nextStep_clicked()
 {
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
-
+    const auto& table = m_paintItemList;
     ++m_index;
-
-    writeChessboardNumber(table.at(m_index));
-
+    paintChessboardItem(m_paintItemList.at(m_index));
     check_index();
 }
 
 void ChessboardCoverage::pbtn_autoDisplay_clicked()
 {
+    pbtn_skipToInitial_clicked();
     ui->label_operateState->setVisible(true);
 
     ui->pbtn_skipToInitial->setEnabled(false);
@@ -254,16 +242,17 @@ void ChessboardCoverage::pbtn_autoDisplay_clicked()
     ui->pbtn_autoDisplay->setEnabled(false);
     ui->pbtn_resetChessboard->setEnabled(false);
 
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+    const auto& table = m_paintItemList;
 
-    const auto size = table.size() * table[0].size();
-    const auto time = 50000 / size;
+    const auto size = table.size();
+    //const auto time = 50000 / size;
+    const auto time = 50;
 
     m_index = 0;
 
     for (CoverageOperator::ChessboardHistoryTableIndex i = 0; i <= m_indexMaxsize; ++i, ++m_index)
     {
-        writeChessboardNumber(table.at(m_index));
+        paintChessboardItem(m_paintItemList.at(i));
         QApplication::processEvents();
 
         QThread::msleep(static_cast<unsigned long>(time));
@@ -305,7 +294,7 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
 
 
     drawChessboard(row, row);
-    paintChessboardItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
+    paintFromItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
     Chessboard chessboard;
     for (int i = 0; i < row; i++) {

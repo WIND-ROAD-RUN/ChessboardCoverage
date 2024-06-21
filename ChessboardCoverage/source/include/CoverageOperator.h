@@ -51,7 +51,7 @@ public:
 
     void chessBoard(int tr, int tc, int dr, int dc, int size);
 
-    const std::vector<Chessboard> & getChessboardHistoryTable()const;
+    const std::vector<Chessboard> & getChessboardHistoryTable();
 };
 
 
