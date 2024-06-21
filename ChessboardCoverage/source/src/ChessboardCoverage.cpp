@@ -1,4 +1,6 @@
 #include "ChessboardCoverage.h"
+#include"PaintOperator.h"
+ 
 #include<QMessageBox>
 #include<QThread>
 
@@ -83,11 +85,11 @@ void ChessboardCoverage::paintChessboardItem(const qint32 row, const qint32 colu
     ui->tableWidget->item(row, column)->setBackground(color);
 }
 
-void ChessboardCoverage::paintChessboard(const Chessboard& chessboard) const
+void ChessboardCoverage::writeChessboardNumber(const Chessboard& chessboard) const
 {
     for (int i = 0; i < chessboard.size(); i++) {
         for (int j = 0; j < chessboard[i].size(); j++) {
-            paintChessboardItem(i, j, getColor(chessboard[i][j]));
+            /*paintChessboardItem(i, j, getColor(chessboard[i][j]));*/
             ui->tableWidget->item(i, j)->setText(QString::number(chessboard[i][j]));
         }
     }
@@ -157,6 +159,9 @@ void ChessboardCoverage::CoverageOperateLoad()
 
     check_index();
 
+    PaintOperator PO;
+    PO.colorPaint(m_coverageOperator->getChessboard());
+
 }
 
 void ChessboardCoverage::pbtn_skipToInitial_clicked()
@@ -165,7 +170,7 @@ void ChessboardCoverage::pbtn_skipToInitial_clicked()
 
     m_index = 0;
 
-    paintChessboard(table.at(m_index));
+    writeChessboardNumber(table.at(m_index));
 
     check_index();
 }
@@ -177,7 +182,7 @@ void ChessboardCoverage::pbtn_skipToFinal_clicked()
     m_index = table.size() - 1;
 
 
-    paintChessboard(table.at(m_index));
+    writeChessboardNumber(table.at(m_index));
 
     check_index();
 
@@ -189,7 +194,7 @@ void ChessboardCoverage::pbtn_lastStep_clicked()
 
     --m_index;
 
-    paintChessboard(table.at(m_index));
+    writeChessboardNumber(table.at(m_index));
 
     check_index();
 }
@@ -200,7 +205,7 @@ void ChessboardCoverage::pbtn_nextStep_clicked()
 
     ++m_index;
 
-    paintChessboard(table.at(m_index));
+    writeChessboardNumber(table.at(m_index));
 
     check_index();
 }
@@ -225,7 +230,7 @@ void ChessboardCoverage::pbtn_autoDisplay_clicked()
 
     for (CoverageOperator::ChessboardHistoryTableIndex i = 0; i <= m_indexMaxsize; ++i, ++m_index)
     {
-        paintChessboard(table.at(m_index));
+        writeChessboardNumber(table.at(m_index));
         QApplication::processEvents();
 
         QThread::msleep(static_cast<unsigned long>(time));

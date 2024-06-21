@@ -58,7 +58,7 @@ private:
 
     void paintChessboardItem(qint32 row, qint32 column, const QBrush& color) const;
 
-    void paintChessboard(const Chessboard &  chessboard) const;
+    void writeChessboardNumber(const Chessboard &  chessboard) const;
 
 private:
     Ui::ChessboardCoverageClass *ui;
