@@ -3,8 +3,11 @@ cmake_minimum_required(VERSION 3.17)
 project(CHESSBOARDCOVERAGE LANGUAGES CXX)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(MINGW_PATH "d:/Development/Qt/6.5.2/mingw_64")
-set(MSVC_PATH "D:/DevelopmentTools/Qt/6.5.2/6.5.2/msvc2019_64")
+#set(MINGW_PATH "d:/Development/Qt/6.5.2/mingw_64")
+#set(MSVC_PATH "D:/Development/Qt/6.5.2/msvc2019_64")
+
+set(MINGW_PATH )
+set(MSVC_PATH )
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

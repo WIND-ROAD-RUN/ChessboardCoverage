@@ -3,6 +3,15 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_ChessboardCoverage.h"
 #include "CoverageOperator.h"
+#include"PaintOperator.h"
+
+enum ChessboardColor{
+    WHITE=0,
+    BLACK=1,
+    RED=2,
+    GREEN=3,
+    YELLOW=4
+};
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class ChessboardCoverageClass; };
@@ -36,7 +45,7 @@ private:
 
 private:
     CoverageOperator* m_coverageOperator{nullptr};
-
+    PaintItemList m_paintItemList{};
 private:
     QVector<QColor> m_color
 
@@ -52,13 +61,14 @@ private:
     void build_connect();
 
     QColor getColor(int value) const;
+    QColor getColor(ChessboardColor color) const;
 
 private:
     void drawChessboard(qint32 row,qint32 column) const;
 
-    void paintChessboardItem(qint32 row, qint32 column, const QBrush& color) const;
-
-    void paintChessboard(const Chessboard &  chessboard) const;
+    void paintFromItem(qint32 row, qint32 column, const QBrush& color) const;
+    void paintChessboardItem(const PaintItem& paintItem);
+    void paintChessboardItem(const PaintItem& paintItem, ChessboardColor color);
 
 private:
     Ui::ChessboardCoverageClass *ui;
