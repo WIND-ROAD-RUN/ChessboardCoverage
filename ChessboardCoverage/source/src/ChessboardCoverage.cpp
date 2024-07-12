@@ -1,12 +1,11 @@
 #include "ChessboardCoverage.h"
-#include"PaintOperator.h"
- 
-#include<QMessageBox>
-#include<QThread>
+#include "PaintOperator.h"
 
-ChessboardCoverage::ChessboardCoverage(QWidget* parent)
-    : QMainWindow(parent)
-    , ui(new Ui::ChessboardCoverageClass())
+#include <QMessageBox>
+#include <QThread>
+
+ChessboardCoverage::ChessboardCoverage(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::ChessboardCoverageClass())
 {
     ui->setupUi(this);
     build_ui();
@@ -40,52 +39,59 @@ void ChessboardCoverage::build_ui()
 void ChessboardCoverage::build_connect()
 {
     QObject::connect(ui->pbtn_resetChessboard, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_resetChessboard_clicked);
+                     this, &ChessboardCoverage::pbtn_resetChessboard_clicked);
 
     QObject::connect(ui->pbtn_lastStep, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_lastStep_clicked);
+                     this, &ChessboardCoverage::pbtn_lastStep_clicked);
     QObject::connect(ui->pbtn_nextStep, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_nextStep_clicked);
+                     this, &ChessboardCoverage::pbtn_nextStep_clicked);
 
     QObject::connect(ui->pbtn_skipToFinal, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_skipToFinal_clicked);
+                     this, &ChessboardCoverage::pbtn_skipToFinal_clicked);
     QObject::connect(ui->pbtn_skipToInitial, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_skipToInitial_clicked);
+                     this, &ChessboardCoverage::pbtn_skipToInitial_clicked);
 
     QObject::connect(ui->pbtn_autoDisplay, &QPushButton::clicked,
-        this, &ChessboardCoverage::pbtn_autoDisplay_clicked);
+                     this, &ChessboardCoverage::pbtn_autoDisplay_clicked);
 }
 
 QColor ChessboardCoverage::getColor(const int value) const
 {
-    if (value == 0) {
-        return QColor{ Qt::black };
+    if (value == 0)
+    {
+        return QColor{Qt::black};
     }
     if (value == -1)
     {
-        return QColor{ Qt::white };
+        return QColor{Qt::white};
     }
     return m_color.at(value % m_color.size());
 }
 
 QColor ChessboardCoverage::getColor(ChessboardColor color) const
 {
-    switch (color) {
-        case ChessboardColor::WHITE:{
-            return QColor{ Qt::white };
-        }
-        case ChessboardColor::BLACK: {
-            return QColor{ Qt::black };
-        }
-        case ChessboardColor::GREEN:{
-            return QColor{ Qt::green };
-        }
-        case ChessboardColor::RED: {
-            return QColor{ Qt::red };
-        }
-        case ChessboardColor::YELLOW: {
-            return QColor{ Qt::yellow };
-        }
+    switch (color)
+    {
+    case ChessboardColor::WHITE:
+    {
+        return QColor{Qt::white};
+    }
+    case ChessboardColor::BLACK:
+    {
+        return QColor{Qt::black};
+    }
+    case ChessboardColor::GREEN:
+    {
+        return QColor{Qt::green};
+    }
+    case ChessboardColor::RED:
+    {
+        return QColor{Qt::red};
+    }
+    case ChessboardColor::YELLOW:
+    {
+        return QColor{Qt::yellow};
+    }
     }
 }
 
@@ -94,37 +100,44 @@ void ChessboardCoverage::drawChessboard(const qint32 row, const qint32 column) c
     ui->tableWidget->clear();
     ui->tableWidget->setRowCount(row);
     ui->tableWidget->setColumnCount(column);
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < column; j++) {
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < column; j++)
+        {
             ui->tableWidget->setItem(i, j, new QTableWidgetItem());
         }
     }
 }
 
-void ChessboardCoverage::paintFromItem(const qint32 row, const qint32 column, const QBrush& color) const
+void ChessboardCoverage::paintFromItem(const qint32 row, const qint32 column, const QBrush &color) const
 {
     ui->tableWidget->item(row, column)->setBackground(color);
 }
 
-void ChessboardCoverage::paintChessboardItem(const PaintItem& paintItem)
+void ChessboardCoverage::paintChessboardItem(const PaintItem &paintItem)
 {
     auto color = paintItem.color;
-    for (const auto &item: paintItem.paintLocate) {
-        if (color==1) {
+    for (const auto &item : paintItem.paintLocate)
+    {
+        if (color == 1)
+        {
             paintFromItem(item.first, item.second, getColor(ChessboardColor::RED));
         }
-        else if(color == 2){
+        else if (color == 2)
+        {
             paintFromItem(item.first, item.second, getColor(ChessboardColor::GREEN));
         }
-        else {
+        else
+        {
             paintFromItem(item.first, item.second, getColor(ChessboardColor::YELLOW));
         }
     }
 }
 
-void ChessboardCoverage::paintChessboardItem(const PaintItem& paintItem, ChessboardColor color)
+void ChessboardCoverage::paintChessboardItem(const PaintItem &paintItem, ChessboardColor color)
 {
-    for (const auto& item : paintItem.paintLocate) {
+    for (const auto &item : paintItem.paintLocate)
+    {
         paintFromItem(item.first, item.second, getColor(color));
     }
 }
@@ -150,35 +163,37 @@ void ChessboardCoverage::check_index() const
 
 void ChessboardCoverage::ini_chessboard()
 {
-        const auto size = 2;
+    const auto size = 2;
 
-        const auto row = pow(2, size);
+    const auto row = pow(2, size);
 
-        drawChessboard(row, row);
-        m_specialBlock_x = 0;
-        m_specialBlock_y = 0;
-        paintFromItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
+    drawChessboard(row, row);
+    m_specialBlock_x = 0;
+    m_specialBlock_y = 0;
+    paintFromItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
-        Chessboard chessboard;
-        for (int i = 0; i < row; i++) {
-            std::vector<int> line;
-            line.reserve(static_cast<std::vector<int>::size_type>(row));
-            for (int j = 0; j < row; j++) {
-                line.push_back(-1);
-            }
-            chessboard.push_back(line);
+    Chessboard chessboard;
+    for (int i = 0; i < row; i++)
+    {
+        std::vector<int> line;
+        line.reserve(static_cast<std::vector<int>::size_type>(row));
+        for (int j = 0; j < row; j++)
+        {
+            line.push_back(-1);
         }
+        chessboard.push_back(line);
+    }
 
-        chessboard[m_specialBlock_x][m_specialBlock_y] = 0;
+    chessboard[m_specialBlock_x][m_specialBlock_y] = 0;
 
-        m_coverageOperator->setChessboard(chessboard);
-        m_coverageOperator->setX(m_specialBlock_x);
-        m_coverageOperator->setY(m_specialBlock_y);
-        m_coverageOperator->setSize(row);
+    m_coverageOperator->setChessboard(chessboard);
+    m_coverageOperator->setX(m_specialBlock_x);
+    m_coverageOperator->setY(m_specialBlock_y);
+    m_coverageOperator->setSize(row);
 
-        m_index = -1;
+    m_index = -1;
 
-        CoverageOperateLoad();
+    CoverageOperateLoad();
 }
 
 void ChessboardCoverage::CoverageOperateLoad()
@@ -190,12 +205,12 @@ void ChessboardCoverage::CoverageOperateLoad()
     ui->pbtn_skipToFinal->setEnabled(true);
     ui->pbtn_autoDisplay->setEnabled(true);
 
-    const auto& table = m_coverageOperator->getChessboardHistoryTable();
+    const auto &table = m_coverageOperator->getChessboardHistoryTable();
 
     m_indexMaxsize = table.size() - 1;
 
     check_index();
-    m_paintItemList= PaintOperator::colorPaint(m_coverageOperator->getChessboard(),ui->sBox_sizeK->value());
+    m_paintItemList = PaintOperator::colorPaint(m_coverageOperator->getChessboard(), ui->sBox_sizeK->value());
     m_indexMaxsize = m_paintItemList.size() - 1;
 }
 
@@ -203,8 +218,9 @@ void ChessboardCoverage::pbtn_skipToInitial_clicked()
 {
     m_index = 0;
 
-    for (const auto& item : m_paintItemList) {
-        paintChessboardItem(item,ChessboardColor::WHITE);
+    for (const auto &item : m_paintItemList)
+    {
+        paintChessboardItem(item, ChessboardColor::WHITE);
     }
 
     check_index();
@@ -214,17 +230,17 @@ void ChessboardCoverage::pbtn_skipToFinal_clicked()
 {
     m_index = m_paintItemList.size() - 1;
 
-    for (const auto & item: m_paintItemList) {
+    for (const auto &item : m_paintItemList)
+    {
         paintChessboardItem(item);
     }
 
     check_index();
-
 }
 
 void ChessboardCoverage::pbtn_lastStep_clicked()
 {
-    const auto& table = m_paintItemList;
+    const auto &table = m_paintItemList;
     paintChessboardItem(m_paintItemList.at(m_index), ChessboardColor::WHITE);
     --m_index;
     check_index();
@@ -232,7 +248,7 @@ void ChessboardCoverage::pbtn_lastStep_clicked()
 
 void ChessboardCoverage::pbtn_nextStep_clicked()
 {
-    const auto& table = m_paintItemList;
+    const auto &table = m_paintItemList;
     ++m_index;
     paintChessboardItem(m_paintItemList.at(m_index));
     check_index();
@@ -250,10 +266,10 @@ void ChessboardCoverage::pbtn_autoDisplay_clicked()
     ui->pbtn_autoDisplay->setEnabled(false);
     ui->pbtn_resetChessboard->setEnabled(false);
 
-    const auto& table = m_paintItemList;
+    const auto &table = m_paintItemList;
 
     const auto size = table.size();
-    //const auto time = 50000 / size;
+    // const auto time = 50000 / size;
     const auto time = 50;
 
     m_index = 0;
@@ -264,8 +280,6 @@ void ChessboardCoverage::pbtn_autoDisplay_clicked()
         QApplication::processEvents();
 
         QThread::msleep(static_cast<unsigned long>(time));
-
-
     }
     --m_index;
 
@@ -277,20 +291,19 @@ void ChessboardCoverage::pbtn_autoDisplay_clicked()
     check_index();
 
     ui->label_operateState->setVisible(false);
-
 }
 
-void ChessboardCoverage::pbtn_resetChessboard_clicked() {
+void ChessboardCoverage::pbtn_resetChessboard_clicked()
+{
 
     const auto size = ui->sBox_sizeK->value();
 
-
     const auto row = pow(2, size);
 
-    const auto locateX= ui->sBox_x->value();
-    const auto locateY= ui->sBox_y->value();
+    const auto locateX = ui->sBox_x->value();
+    const auto locateY = ui->sBox_y->value();
 
-    if(locateX>=row||locateY>=row)
+    if (locateX >= row || locateY >= row)
     {
         QMessageBox::warning(this, "错误", "特殊块位置不在棋盘中");
 
@@ -300,15 +313,16 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
     m_specialBlock_x = locateX;
     m_specialBlock_y = locateY;
 
-
     drawChessboard(row, row);
     paintFromItem(m_specialBlock_x, m_specialBlock_y, Qt::black);
 
     Chessboard chessboard;
-    for (int i = 0; i < row; i++) {
+    for (int i = 0; i < row; i++)
+    {
         std::vector<int> line;
         line.reserve(static_cast<std::vector<int>::size_type>(row));
-        for (int j = 0; j < row; j++) {
+        for (int j = 0; j < row; j++)
+        {
             line.push_back(-1);
         }
         chessboard.push_back(line);
@@ -324,5 +338,4 @@ void ChessboardCoverage::pbtn_resetChessboard_clicked() {
     m_index = 0;
 
     CoverageOperateLoad();
-
 }

@@ -1,22 +1,98 @@
 {
-  "version": 3,
-  "configurePresets": [
-    {
-      "hidden": true,
-      "name": "Qt",
-      "cacheVariables": {
-        "CMAKE_PREFIX_PATH": "$env{QTDIR}"
-      },
-      "vendor": {
-        "qt-project.org/Qt": {
-          "checksum": "wVa86FgEkvdCTVp1/nxvrkaemJc="
+    "version": 5,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 26,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "MSVC",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "warnings": {
+                "dev": true,
+                "deprecated": true
+            },
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "MSVC_2022_debug_x64",
+            "inherits": "MSVC",
+            "displayName": "MSVC_2022_debug_x64",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_DEBUG_POSIFIX": "d"
+            }
+        },
+        {
+            "name": "MSVC_2022_release_x64",
+            "inherits": "MSVC",
+            "displayName": "MSVC_2022_release_x64",
+            "architecture": {
+                "value": "x64",
+                "strategy": "set"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "MinGW",
+            "hidden": true,
+            "generator": "MinGW Makefiles",
+            "warnings": {
+                "dev": true,
+                "deprecated": true
+            },
+            "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "MinGW_debug_x64",
+            "inherits": "MinGW",
+            "displayName": "MinGW_debug_x64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_DEBUG_POSIFIX": "d"
+            }
+        },
+        {
+            "name": "MinGW_release_x64",
+            "inherits": "MinGW",
+            "displayName": "MinGW_release_x64",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
-      }
-    }
-  ],
-  "vendor": {
-    "qt-project.org/Presets": {
-      "checksum": "67SmY24ZeVbebyKD0fGfIzb/bGI="
-    }
-  }
+    ],
+    "buildPresets": [
+        {
+            "name": "MSVC_2022_debug_x64",
+            "configurePreset": "MSVC_2022_debug_x64",
+            "displayName": "MSVC_debug_x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "MSVC_2022_release_x64",
+            "configurePreset": "MSVC_2022_release_x64",
+            "displayName": "MSVC_release_x64",
+            "configuration": "Release"
+        },
+        {
+            "name": "MinGW_debug_x64",
+            "configurePreset": "MinGW_debug_x64",
+            "displayName": "MinGW_debug_x64",
+            "configuration": "Debug"
+        },
+        {
+            "name": "MinGW_release_x64",
+            "configurePreset": "MinGW_release_x64",
+            "displayName": "MinGW_release_x64",
+            "configuration": "Release"
+        }
+    ]
 }
