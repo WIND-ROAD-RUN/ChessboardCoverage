@@ -23,10 +23,6 @@
             "architecture": {
                 "value": "x64",
                 "strategy": "set"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_DEBUG_POSIFIX": "d"
             }
         },
         {
@@ -36,9 +32,6 @@
             "architecture": {
                 "value": "x64",
                 "strategy": "set"
-            },
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -54,19 +47,12 @@
         {
             "name": "MinGW_debug_x64",
             "inherits": "MinGW",
-            "displayName": "MinGW_debug_x64",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_DEBUG_POSIFIX": "d"
-            }
+            "displayName": "MinGW_debug_x64"
         },
         {
             "name": "MinGW_release_x64",
             "inherits": "MinGW",
-            "displayName": "MinGW_release_x64",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
+            "displayName": "MinGW_release_x64"
         }
     ],
     "buildPresets": [
