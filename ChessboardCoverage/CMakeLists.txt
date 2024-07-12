@@ -1,16 +1,16 @@
-set(WORKPLACE_DIR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../)
-set(source_files_path ${CMAKE_CURRENT_SOURCE_DIR}/source)
+message(STATUS "Current list directory: ${CMAKE_CURRENT_LIST_DIR}")
 
-find_package(Qt6 COMPONENTS Widgets REQUIRED) # Qt COMPONENTS
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets) # Qt COMPONENTS
 
-list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS ${source_files_path}/ui)
+set(SOURCE_PATH ${CMAKE_CURRENT_LIST_DIR}/source)
+list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS ${SOURCE_PATH}/ui)
 
-aux_source_directory(${source_files_path}/src srcs)
-file(GLOB include_files ${source_files_path}/include/*.h)
+include_directories(${SOURCE_PATH}/include)
 
-
+aux_source_directory(${SOURCE_PATH}/src srcs)
+file(GLOB include_files ${SOURCE_PATH}/include/*.h)
 
 set(EXECUTABLE_OUTPUT_PATH ${WORKPLACE_DIR_PATH}/out/bin)
 add_executable(ChessboardCoverage ${srcs} ${include_files}) 
-target_include_directories(ChessboardCoverage PRIVATE ${source_files_path}/include)
+target_include_directories(ChessboardCoverage PRIVATE ${SOURCE_PATH}/include)
 target_link_libraries(ChessboardCoverage PRIVATE Qt6::Widgets) # Qt6 Shared Library

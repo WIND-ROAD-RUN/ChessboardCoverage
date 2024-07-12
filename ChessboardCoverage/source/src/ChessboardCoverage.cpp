@@ -1,6 +1,5 @@
 #include "ChessboardCoverage.h"
 #include "PaintOperator.h"
-
 #include <QMessageBox>
 #include <QThread>
 
